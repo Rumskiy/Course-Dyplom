@@ -1,40 +1,26 @@
 import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../../Backend/Auth";
+import {AuthContext} from "../../../Backend/Auth";
 import {useNavigate} from "react-router";
 import {
-    Avatar,
     Box,
     Button,
     Container,
-    Divider,
     Grid,
-    List,
-    ListItem,
-    ListItemText,
     Typography,
     Card,
     CardContent,
     CardActions,
     CardMedia
 } from "@mui/material";
-import {GetUserCourses} from "../../api/Course";
+import {GetUserCourses} from "../../../api/Course";
 import {AccountPage} from "../AccountPage";
 
 export function AccountCourses() {
     // @ts-ignore
-    const {user, logout} = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
     const nav = useNavigate();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const logOut = () => {
-        if (user !== undefined) {
-            logout();
-            nav('/login');
-        } else {
-            nav('/admin/dashboard');
-        }
-    };
 
     useEffect(() => {
         const fetchCourses = async () => {

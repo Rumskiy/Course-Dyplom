@@ -121,6 +121,7 @@ export const QuizTestPage: React.FC = () => {
             ...prev,
             [questionId]: {
                 // Ensure question_id is always present
+                // @ts-ignore
                 question_id: questionId,
                 // Merge existing data (if any) with new data
                 ...(prev[questionId] || {}),

@@ -18,7 +18,7 @@ export const RequireAuth = ({ children }: RequireAuthProps) => {
 
     // Якщо користувач не авторизований, перенаправляємо на сторінку входу
     if (!user) {
-        return <Navigate to="/admin/login" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     // Якщо користувач авторизований, повертаємо дочірній компонент

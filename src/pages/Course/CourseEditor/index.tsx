@@ -171,7 +171,7 @@ export function EditorCourse() {
             </Button>
             <Box sx={{mb: 4, p: 3, boxShadow: 3, borderRadius: 2}}>
                 <Typography variant="h4" gutterBottom>
-                    Рудагувати курс
+                    Редагувати курс
                 </Typography>
 
                 <Box sx={{mb: 2}}>

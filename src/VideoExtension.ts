@@ -24,17 +24,4 @@ export const Video = Node.create({
     renderHTML({ HTMLAttributes }) {
         return ["iframe", mergeAttributes(HTMLAttributes, { width: "560", height: "315", frameborder: "0", allowfullscreen: "true" })];
     },
-
-    addCommands() {
-        return {
-            setVideo:
-                (options) =>
-                    ({ commands }) => {
-                        return commands.insertContent({
-                            type: this.name,
-                            attrs: options,
-                        });
-                    },
-        };
-    },
 });

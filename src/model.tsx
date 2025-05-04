@@ -1,4 +1,9 @@
 export interface UserLogin {
+    token: string;
+    id: string;
+    avatar: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
 }
@@ -16,6 +21,7 @@ export interface UpdateData {
     lastName: string;
     password: string;
     email: string;
+    avatar_img?: string;
 }
 
 // Course Interfaces

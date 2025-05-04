@@ -6,13 +6,26 @@ import {
     Button,
     FormControl,
     Typography,
-    Box, Container, MenuItem, Select, InputLabel,
+    Box, Container, MenuItem, Select, InputLabel, styled,
 } from "@mui/material";
 import {Categories} from "../../../model.tsx";
 import {useNavigate} from "react-router-dom";
 import {CreateCourse} from "../../../api/Course";
 import {CategoryGet} from "../../../api/Category";
 import {toast} from "react-toastify";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 
 const CourseCreate = () => {
@@ -69,13 +82,6 @@ const CourseCreate = () => {
         }
     });
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files.length > 0) {
-            formik.setFieldValue("title_img", event.target.files[0]);
-        }
-    };
-
-
     return (
         <Container>
             <Box sx={{maxWidth: 1200, mx: "auto", mt: 12}}>
@@ -95,13 +101,29 @@ const CourseCreate = () => {
                             onBlur={formik.handleBlur}
                         />
                     </FormControl>
-                    <input
-                        type="file"
-                        name="title_img"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        style={{ marginBottom: "16px" }}
-                    />
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        sx={{marginBottom: '16px'}}
+                        startIcon={<CloudUploadIcon/>}
+                    >
+                        Upload files
+                        <VisuallyHiddenInput
+                            type="file"
+                            name="title_img"
+                            onChange={(event) => {
+                                if (event.currentTarget.files) {
+                                    formik.setFieldValue(
+                                        "title_img",
+                                        event.currentTarget.files[0]
+                                    );
+                                }
+                            }}
+                            multiple
+                        />
+                    </Button>
                     <FormControl fullWidth sx={{mb: 3}}>
                         <TextField
                             label="Опис"

@@ -21,10 +21,9 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AssessmentIcon from '@mui/icons-material/Assessment'; // Іконка для прогресу
 import RedoIcon from '@mui/icons-material/Redo'; // Іконка для "перепройти"
-import PageviewIcon from '@mui/icons-material/Pageview'; // Іконка для "переглянути"
-import { AuthContext } from '../../Backend/Auth';
-import {getQuizAttempts} from "../../api/QuizAttemtps"; // Перевірте шлях
-import { QuizAttempt } from '../../model';
+import { AuthContext } from '../../../Backend/Auth';
+import {getQuizAttempts} from "../../../api/QuizAttemtps"; // Перевірте шлях
+import { QuizAttempt } from '../../../model.tsx';
 import {AccountPage} from "../AccountPage";
 
 interface GroupedAttemptsByTest {
@@ -39,6 +38,7 @@ export const AccountProgressPage: React.FC = () => {
     // @ts-ignore
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    // @ts-ignore
     const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -97,13 +97,6 @@ export const AccountProgressPage: React.FC = () => {
 
         return () => { isMounted = false; }; // Очищення
     }, [user]); // Перезавантажуємо, якщо користувач змінився
-
-
-
-    // Навігація для перегляду деталей спроби (потрібна нова сторінка/компонент)
-    const handleViewAttempt = (attemptId: number | string) => {
-        navigate(`/account/progress/attempt/${attemptId}`); // Приклад маршруту
-    };
 
     // Навігація для повторного проходження тесту
     const handleRetakeTest = (sectionId: number | string | undefined) => {
@@ -195,15 +188,6 @@ export const AccountProgressPage: React.FC = () => {
                                                                         size="small"
                                                                         sx={{ fontWeight: 'bold' }}
                                                                     />
-                                                                    <Button
-                                                                        variant="outlined"
-                                                                        size="small"
-                                                                        startIcon={<PageviewIcon />}
-                                                                        onClick={() => handleViewAttempt(attempt.id)}
-                                                                        sx={{ textTransform: 'none' }}
-                                                                    >
-                                                                        Деталі
-                                                                    </Button>
                                                                     <Button
                                                                         variant="outlined"
                                                                         size="small"
