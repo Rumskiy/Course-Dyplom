@@ -93,8 +93,8 @@ export const Register = () => {
                         label="Role"
                         onChange={formik.handleChange}
                     >
-                        <MenuItem value={1}>Student</MenuItem>
-                        <MenuItem value={2}>Teacher</MenuItem>
+                        <MenuItem value={1}>Teacher</MenuItem>
+                        <MenuItem value={2}>Student</MenuItem>
                     </Select>
                     {formik.touched.role && formik.errors.role ? (
                         <div style={{color: 'red'}}>{formik.errors.role}</div>

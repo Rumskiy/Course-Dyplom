@@ -68,10 +68,9 @@ export const Login: React.FC = () => {
                 // --- Store and Update Context ---
                 // Store the comprehensive user info
                 localStorage.setItem("userInfo", JSON.stringify(userInfo));
-                // Pass the same comprehensive object to the context's login function
+
                 // @ts-ignore
                 login(userInfo);
-
                 toast.success("Вхід вдався успішно!");
                 navigate("/account/settings"); // Or to user dashboard
 

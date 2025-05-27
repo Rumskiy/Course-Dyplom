@@ -11,6 +11,8 @@ export const RequireAuth = ({ children }: RequireAuthProps) => {
     // @ts-ignore
     const { user, isLoading } = useContext(AuthContext);
 
+    console.log(user)
+
     // Якщо дані завантажуються, показуємо індикатор завантаження
     if (isLoading) {
         return <div>Loading...</div>;

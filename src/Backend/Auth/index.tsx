@@ -1,18 +1,19 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import axios from 'axios';
-import { UserLogin, UpdateData } from "../../model"; // assume UpdateData has full user fields
+import { UserLogin } from "../../model";
 import { toast } from "react-toastify";
-import {ApiToken} from "../../api/api.tsx";
 
 export type AuthContextType = {
     user: UserLogin | null;
-    login: (user: UserLogin) => Promise<void>;
+    isLoading: boolean;
+    login: (user: UserLogin) => void;
     logout: () => void;
 };
 
 const defaultContextValue: AuthContextType = {
     user: null,
-    login: async () => {},
+    isLoading: true,
+    login: () => {},
     logout: () => {},
 };
 
@@ -23,60 +24,61 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<UserLogin | null>(() => {
-        const stored = localStorage.getItem('userInfo');
-        return stored ? JSON.parse(stored) : null;
-    });
+    const [user, setUser] = useState<UserLogin | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Sync axios header when user token changes, and fetch full profile
+    // Initialize user from localStorage and set axios header
     useEffect(() => {
-        const initAuth = async () => {
-            if (user?.token) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-                try {
-                    const resp = await axios.get(`${ApiToken}/account`);
-                    const full: UpdateData = resp.data.data;
-                    // merge minimal userLogin (id, token, role, avatar) with full profile fields
-                    setUser({ ...user, ...full });
-                } catch (err) {
-                    console.error('Failed to fetch full user profile', err);
-                    // invalid token or expired, force logout
-                    logout();
-                }
-            } else {
-                delete axios.defaults.headers.common['Authorization'];
-            }
-        };
-        initAuth();
-    }, [user?.token]);
-
-    const login = async (userData: UserLogin) => {
+        let mounted = true;
         try {
-            // store minimal login payload
-            localStorage.setItem('userInfo', JSON.stringify(userData));
-            // set token header
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
-            // fetch full profile
-            const resp = await axios.get(`${ApiToken}/account`);
-            const full: UpdateData = resp.data.data;
-            const merged: UserLogin = { ...userData, ...full };
-            setUser(merged);
+            const stored = localStorage.getItem('userInfo');
+
+            if (stored) {
+                const parsed: UserLogin = JSON.parse(stored);
+                if (parsed.id && parsed.token) {
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${parsed.token}`;
+                    if (mounted) setUser(parsed);
+                } else {
+                    localStorage.removeItem('userInfo');
+                }
+            }
         } catch (err) {
-            console.error('Error fetching user profile after login', err);
-            toast.error('Не вдалося завантажити дані користувача.');
+            console.error('Error loading user from storage', err);
+            localStorage.removeItem('userInfo');
+        } finally {
+            if (mounted) setIsLoading(false);
+        }
+        return () => { mounted = false; };
+    }, []);
+
+    const login = (userData: UserLogin) => {
+
+        try {
+            localStorage.setItem('userInfo', JSON.stringify(userData));
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+            setUser(userData);
+        } catch (err) {
+            console.error('Error saving user info', err);
+            toast.error('Не вдалося зберегти дані сесії.');
         }
     };
 
     const logout = () => {
         localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
         setUser(null);
     };
 
     const contextValue = React.useMemo(
-        () => ({ user, login, logout }),
-        [user]
+        () => ({ user, isLoading, login, logout }),
+        [user, isLoading]
     );
+
+    if (isLoading) {
+        // Optionally render a spinner or null while restoring session
+        return null;
+    }
 
     return (
         <AuthContext.Provider value={contextValue}>

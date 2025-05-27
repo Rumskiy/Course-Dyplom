@@ -1,38 +1,28 @@
-import axios from "axios";
-import {ApiToken, token} from "../api.tsx";
+import {apiClient} from "../api.tsx";
 import {UpdateData} from "../../model.tsx";
 
+export type AccountData = {
+    // тут опиши всі поля, які приходять з /account,
+    // наприклад:
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    avatar?: string;
+    // …та інші
+}
 
-
-export const AccountSettings = async () => {
-    // 1) Read userInfo from localStorage
-    const raw = localStorage.getItem('userInfo');
-    const { token } = raw ? JSON.parse(raw) : { token: '' };
-
-    if (!token) {
-        throw new Error('No auth token found');
-    }
-
-    // 2) Attach Bearer header on every call
-    const response = await axios.get(`${ApiToken}/account`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
-    });
-
-    return response.data.data;
+export const AccountSettings = async (): Promise<AccountData> => {
+    const { data } = await apiClient.get<{ data: AccountData }>('/account');
+    return data.data;
 };
 
-export const AccountSettingsSave = async (accountDataSave: UpdateData) => {
-    try {
-        const response = await axios.post(`${ApiToken}/account`, accountDataSave, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        return response.data;
-    } catch (error) {
-        console.error("Error data:", error);
-        throw error;
-    }
-}
+export const AccountSettingsSave= async (
+    accountData: UpdateData
+): Promise<AccountData> => {
+    const { data } = await apiClient.post<{ data: AccountData }>(
+        '/account',
+        accountData
+    );
+    return data.data;
+};

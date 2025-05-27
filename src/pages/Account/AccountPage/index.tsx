@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {useContext} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import {
     Avatar,
     Box,
@@ -11,8 +11,7 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
-import profileImg from '../../../assets/5494.jpg';
-import { AuthContext } from '../../../Backend/Auth';
+import {AuthContext} from '../../../Backend/Auth';
 
 export function AccountPage() {
     const authContext = useContext(AuthContext);
@@ -21,32 +20,35 @@ export function AccountPage() {
     if (!authContext) {
         console.error('AuthContext not found. Ensure AccountPage is within AuthProvider.');
         return (
-            <Typography color="error" sx={{ p: 3 }}>
+            <Typography color="error" sx={{p: 3}}>
                 Authentication service unavailable.
             </Typography>
         );
     }
 
-    const { user, logout } = authContext;
+    const {user, logout} = authContext;
 
     const handleLogout = () => {
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
         logout();
         navigate('/login');
     };
 
     if (!user) {
         return (
-            <Typography sx={{ p: 3 }}>
+            <Typography sx={{p: 3}}>
                 Будь ласка, увійдіть, щоб переглянути свій обліковий запис.
             </Typography>
         );
     }
 
-    const userAvatarUrl = user.avatar || profileImg;
+    const userAvatarUrl = user.avatar;
+    const isTeacher = user?.role === '1';
 
     return (
-        <Box sx={{ p: 3, boxShadow: 3, borderRadius: 2 }}>
-            <Box sx={{ textAlign: 'center', mb: 2 }}>
+        <Box sx={{p: 3, boxShadow: 3, borderRadius: 2}}>
+            <Box sx={{textAlign: 'center', mb: 2}}>
                 <Avatar
                     src={userAvatarUrl}
                     alt={
@@ -54,7 +56,7 @@ export function AccountPage() {
                             ? `${user.firstName} ${user.lastName}'s Avatar`
                             : 'User Avatar'
                     }
-                    sx={{ width: 150, height: 150, mx: 'auto', mb: 1 }}
+                    sx={{width: 150, height: 150, mx: 'auto', mb: 1}}
                 />
                 {(user.firstName || user.lastName) && (
                     <Typography variant="h6">
@@ -71,23 +73,26 @@ export function AccountPage() {
             <List component="nav">
                 <ListItem disablePadding>
                     <ListItemButton component={Link} to="/account/settings">
-                        <ListItemText primary="⚙️ Налаштування" />
+                        <ListItemText primary="⚙️ Налаштування"/>
                     </ListItemButton>
                 </ListItem>
-                <Divider component="li" />
-                <ListItem disablePadding>
-                    <ListItemButton component={Link} to="/account/courses">
-                        <ListItemText primary="📚 Ваші курси" />
-                    </ListItemButton>
-                </ListItem>
-                <Divider component="li" />
+                <Divider component="li"/>
+                {user && isTeacher && (
+                    <ListItem disablePadding>
+                        <ListItemButton component={Link} to="/account/courses">
+                            <ListItemText primary="📚 Ваші курси"/>
+                        </ListItemButton>
+                    </ListItem>
+                )}
+
+                <Divider component="li"/>
                 <ListItem disablePadding>
                     <ListItemButton component={Link} to="/account/progress">
-                        <ListItemText primary="📝 Ваші результати" />
+                        <ListItemText primary="📝 Ваші результати"/>
                     </ListItemButton>
                 </ListItem>
-                <Divider component="li" />
-                <ListItem sx={{ mt: 2 }}>
+                <Divider component="li"/>
+                <ListItem sx={{mt: 2}}>
                     <Button variant="outlined" color="error" fullWidth onClick={handleLogout}>
                         Вийти
                     </Button>

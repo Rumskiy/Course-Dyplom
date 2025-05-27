@@ -1,5 +1,6 @@
 import axios from "axios";
-import {ApiToken, token} from "../api.tsx";
+import {apiClient, ApiToken} from "../api.tsx";
+import {Course} from "../../model.tsx";
 
 export const GetCourses = async () => {
     const response = await axios.get(`${ApiToken}/courses`);
@@ -11,57 +12,35 @@ export const GetCoursesById = async (id: number | string) => {
     return response.data;
 };
 
-
 export const GetUserCourses = async () => {
-    try {
-        const response = await axios.get(`${ApiToken}/user/courses`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching user courses:", error);
-        throw error;
-    }
+    const response = await axios.get(`${ApiToken}/user/courses`);
+    return response.data;
 };
 
-export const UpdateCourse = async (id: string, data: FormData) => {
-    try {
-        const response = await axios.post(
-            `${ApiToken}/courses/edit/${id}`,
-            data,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
-        return response.data;
-    } catch (error) {
-        console.error("Error updating course:", error);
-        throw error;
-    }
+export const UpdateCourse = async (
+    id: number | string,
+    courseData: FormData
+): Promise<Course> => {
+    const { data } = await apiClient.post<Course>(
+        `/courses/edit/${id}`,
+        courseData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+    return data;
 };
 
 
 
 export const CreateCourse = async (courseData: FormData) => {
+    const { data } = await apiClient.post<Course>(
+        '/courses',
+        courseData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+    return data;
+};
 
-    try {
-        const response = await axios.post(
-            `${ApiToken}/courses`,
-            courseData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-        return response.data;
-    } catch (error) {
-        console.error("Error creating course:", error);
-        throw error;
-    }
+export const getCoursesByCategoryId = async (id: number | string) => {
+    const response = await axios.get(`${ApiToken}/courses/category/${id}`);
+    return response.data;
 };

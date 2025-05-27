@@ -163,7 +163,7 @@ export function EditorCourse() {
     };
 
     return (
-        <Container maxWidth="lg" sx={{mt: 12, px: 4}}>
+        <Container maxWidth="lg" sx={{mt: 12, px: 4, mb: 12}}>
             <Button onClick={() => nav(`/account/courses`)}>
                 <Typography>
                     Вернутися назад
@@ -176,7 +176,7 @@ export function EditorCourse() {
 
                 <Box sx={{mb: 2}}>
                     {course?.title_img && (
-                        <Box sx={{mt: 2}}>
+                        <Box sx={{mt: 2, maxWidth: '120px'}}>
                             <img
                                 src={String(course.title_img[0].link)}
                                 alt="Course Image"

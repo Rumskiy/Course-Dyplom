@@ -6,6 +6,7 @@ export interface UserLogin {
     lastName: string;
     email: string;
     password: string;
+    role?: string;
 }
 
 export interface RegisterUser {

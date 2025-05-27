@@ -11,7 +11,7 @@ import {
     Alert,
 } from "@mui/material";
 import {CategoryGet} from "../../api/Category";
-import {GetCourses, GetCoursesById} from "../../api/Course";
+import {GetCourses, getCoursesByCategoryId} from "../../api/Course";
 import {Categories, Course} from "../../model.tsx";
 import {CategoryCard} from "../../components/Course/CategoryCard";
 
@@ -80,20 +80,17 @@ export const CategoryPage = () => {
             if (id === null) {
                 // --- Fetching ALL courses ---
                 response = await GetCourses();
-                console.log("API Response (All Courses):", response);
                 // GetCourses returns { data: Course[] } - Access the array directly
                 const coursesArray = response.data || [];
                 setCourses(Array.isArray(coursesArray) ? coursesArray : []); // Ensure it's an array
 
             } else {
                 // --- Fetching courses by Category ID ---
-                response = await GetCoursesById(id);
-                console.log(`API Response (Category ${id}):`, response);
-                // GetCoursesById returns { data: Course } - The single course object is nested
+                response = await getCoursesByCategoryId(id);
                 const singleCourse = response.data; // Access the inner course object
 
                 // Check if a course was found and wrap it in an array
-                setCourses(singleCourse ? [singleCourse] : []); // Wrap the object in an array, or set empty array
+                setCourses(singleCourse); // Wrap the object in an array, or set empty array
 
             }
         } catch (err: any) {
