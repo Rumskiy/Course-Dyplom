@@ -154,7 +154,7 @@ export interface QuizResultPayload {
     answers: UserAnswerPayload[];
 }
 
-interface TestReference {
+export interface TestReference {
     id: number,
     title: string,
     section_id: number,
@@ -170,4 +170,25 @@ export interface QuizAttempt {
     test: TestReference | null;
     section_title: string | null;
     course_title: string | null;
+}
+
+export interface CourseWithAttempts {
+    course: CourseInfo;
+    attempts: QuizAttempt[];
+}
+
+export interface CourseInfo {
+    id: number;
+    title: string;
+    // ... інші поля курсу, якщо є
+}
+
+export interface TestInfo { // Додано для ясності
+    id: number;
+    title: string;
+    section_id?: number; // Може бути необов'язковим, якщо не завжди є
+    section?: { // Якщо ваш QuizAttemptResource повертає інформацію про секцію
+        id: number;
+        title: string;
+    };
 }

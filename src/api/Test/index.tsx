@@ -3,7 +3,7 @@ import {QuizResultPayload} from "../../model.tsx";
 
 export const getTest = async (id: string) => {
     try {
-        const response = await apiClient.get(`/tests/${id}`);
+        const response = await apiClient.get(`courses/section/tests/${id}`);
         return response.data;
     }catch(error) {
         console.error(error || 'Error getting test');

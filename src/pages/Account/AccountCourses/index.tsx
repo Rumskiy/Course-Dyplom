@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import {GetUserCourses} from "../../../api/Course";
 import {AccountPage} from "../AccountPage";
+import { apiClient } from "../../../api/api";
 
 export function AccountCourses() {
     // @ts-ignore
@@ -26,7 +27,6 @@ export function AccountCourses() {
         const fetchCourses = async () => {
             try {
                 const response = await GetUserCourses();
-                console.log(response);
                 setCourses(response.data);
             } catch (error) {
                 console.error("Error fetching user courses:", error);
@@ -36,11 +36,23 @@ export function AccountCourses() {
         };
 
         if (user) fetchCourses();
-    }, [user]);
+    }, [user, loading]);
 
     const createCourse = () => {
         nav('/course/create');
     };
+
+    const handleDeleteCourse = async (id: string) => {
+        setLoading(true);
+        try {
+            const res = await apiClient.delete(`courses/${id}`);
+            // window.location.reload();
+            setLoading(false)
+            return res;
+        }catch(error) {
+            console.log(error);
+        }
+    }
 
     return (
         <Container maxWidth="lg" sx={{mt: 12}}>
@@ -85,6 +97,9 @@ export function AccountCourses() {
                                             </Button>
                                             <Button size="small" color="secondary" onClick={() => nav(`/course/edit/${course.id}`)}>
                                                 Edit
+                                            </Button>
+                                            <Button size="small" color="error" onClick={() => handleDeleteCourse(course.id)}>
+                                                Видалити
                                             </Button>
                                         </CardActions>
                                     </Card>

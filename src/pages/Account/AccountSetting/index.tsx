@@ -1,10 +1,9 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { Box, Button, Container, Grid, styled, TextField, Typography, Avatar } from '@mui/material';
-import { toast } from 'react-toastify';
+import React, {useState, useEffect, ChangeEvent} from 'react';
+import {Box, Button, Container, Grid, styled, TextField, Typography, Avatar} from '@mui/material';
+import {toast} from 'react-toastify';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { AccountSettings, AccountSettingsSave } from '../../../api/AccountSettings';
-import { UpdateData } from '../../../model';
-import { AccountPage } from '../AccountPage';
+import {AccountData, AccountSettings, AccountSettingsSave} from '../../../api/AccountSettings';
+import {AccountPage} from '../AccountPage';
 
 const VisuallyHiddenInput = styled('input')({
     border: 0,
@@ -43,7 +42,7 @@ export const AccountSetting = () => {
         const fetchAccountData = async () => {
             try {
 
-                const res: UpdateData = await AccountSettings();
+                const res: AccountData = await AccountSettings();
                 setFormData({
                     firstName: res.firstName || '',
                     lastName: res.lastName || '',
@@ -61,15 +60,15 @@ export const AccountSetting = () => {
     }, []);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setFormData(prev => ({...prev, [name]: value}));
     };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
         if (file) {
             const preview = URL.createObjectURL(file);
-            setFormData(prev => ({ ...prev, avatarFile: file, avatarPreview: preview }));
+            setFormData(prev => ({...prev, avatarFile: file, avatarPreview: preview}));
         }
     };
 
@@ -87,7 +86,7 @@ export const AccountSetting = () => {
             }
             // @ts-ignore
             const res = await AccountSettingsSave(data);
-            toast.success(res.data.message);
+            toast.success('Ваші дані збережено');
             setEditMode(false);
         } catch (error) {
             console.error('Error updating account:', error);
@@ -96,24 +95,27 @@ export const AccountSetting = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 12 }}>
+        <Container maxWidth="lg" sx={{mt: 12}}>
             <Grid container spacing={4}>
                 <Grid item xs={12} md={4}>
-                    <AccountPage  />
+                    <AccountPage/>
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <Box sx={{ p: 4, boxShadow: 3, borderRadius: 2 }}>
+                    <Box sx={{p: 4, boxShadow: 3, borderRadius: 2}}>
                         <Typography variant="h4" gutterBottom>
                             Account Settings
                         </Typography>
                         <Container maxWidth="sm">
-                            <Box component="form" onSubmit={handleSave} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Box component="form" onSubmit={handleSave}
+                                 sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
                                 {formData.avatarPreview && (
-                                    <Avatar src={formData.avatarPreview} sx={{ width: 80, height: 80, mb: 2 }} />
+                                    <Avatar src={formData.avatarPreview} sx={{width: 80, height: 80, mb: 2}}/>
                                 )}
-                                <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={!editMode}>
+                                <Button component="label" variant="contained" startIcon={<CloudUploadIcon/>}
+                                        disabled={!editMode}>
                                     {formData.avatarFile ? 'Змінити фото' : 'Завантажити фото'}
-                                    <VisuallyHiddenInput name="avatar_img" type="file" accept="image/*" onChange={handleFileChange} />
+                                    <VisuallyHiddenInput name="avatar_img" type="file" accept="image/*"
+                                                         onChange={handleFileChange}/>
                                 </Button>
                                 <TextField
                                     label="First Name"
@@ -148,7 +150,7 @@ export const AccountSetting = () => {
                                 />
                                 {editMode ? (
                                     <Box>
-                                        <Button type="submit" variant="contained" sx={{ mr: 2 }}>
+                                        <Button type="submit" variant="contained" sx={{mr: 2}}>
                                             Save
                                         </Button>
                                         <Button variant="outlined" onClick={() => setEditMode(false)}>

@@ -137,7 +137,7 @@ const getTestById = async (id: string | number): Promise<TestData> => {
 const updateTestApi = async (id: string | number, formDataPayload: FormData): Promise<any> => {
     // Важливо: Laravel очікує POST для FormData навіть для оновлення.
     // Додаємо _method=PUT, якщо ваш бекенд це підтримує, або використовуємо POST роут.
-    formDataPayload.append('_method', 'PUT'); // Стандартний спосіб Laravel для PUT з FormData
+    formDataPayload // Стандартний спосіб Laravel для PUT з FormData
 
     // Переконайтесь, що цей ендпоінт правильний для ОНОВЛЕННЯ тесту
     // Можливо, це /courses/section/tests/{id} з методом POST (завдяки _method=PUT)

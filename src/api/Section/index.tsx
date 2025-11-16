@@ -12,13 +12,21 @@ export const getSectionsById = async (id: string): Promise<Section> => {
     return data;
 };
 
-export const CreateSection = async (props: any) => {
-    const response = await apiClient.post('/courses/sections', props);
+export const createSectionApi = async (formData: any) => {
+    const response = await apiClient.post('/courses/sections', formData, { // Надсилаємо на ендпоінт створення
+        headers: {
+            'Content-Type': 'multipart/form-data', // Важливо для FormData
+        },
+    });
     return response.status === 201 ? response.data : null;
 };
 
-export const UpdateSection = async (id: string, props: any) => {
-    const response = await apiClient.post(`/courses/sections/${id}`, props);
+export const updateSectionApi = async (id: string, formData: any) => {
+    const response = await apiClient.post(`/courses/sections/${id}`, formData, { // Надсилаємо на ендпоінт створення
+        headers: {
+            'Content-Type': 'multipart/form-data', // Важливо для FormData
+        },
+    });
     return response.status === 201 ? response.data : null;
 };
 

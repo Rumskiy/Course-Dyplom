@@ -23,6 +23,7 @@ export const RequireRole: React.FC<RequireRoleProps> = ({ allowedRoles, children
         // неавторизовані — на логін
         return <Navigate to="/login" replace />;
     }
+    // @ts-ignore
     if (!allowedRoles.includes(user.role)) {
         // не має потрібної ролі — кидаємо на домашню або показуємо 403
         return <Navigate to="/" replace />;

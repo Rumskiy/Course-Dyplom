@@ -485,7 +485,6 @@ export const QuizTestPage: React.FC = () => {
                 alignItems: 'center',
                 minHeight: '100vh',
                 bgcolor: 'grey.100',
-                p: 2
             }}>
                 {error ? (
                     // Display Error
@@ -526,7 +525,7 @@ export const QuizTestPage: React.FC = () => {
         const isTimeRunningOut = displayTime !== null && displayTime <= 10;
 
         return (
-            <Container maxWidth="md" sx={{py: {xs: 2, md: 4}}}>
+            <Container maxWidth="md" sx={{py: {xs: 2, md: 12}}}>
                 <Paper elevation={3} sx={{p: {xs: 2, sm: 3, md: 4}, borderRadius: 2, position: 'relative'}}>
                     {/* Top Bar: Timer & Navigation */}
                     <Box sx={{

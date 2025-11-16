@@ -361,7 +361,8 @@ export const CoursePage = () => {
                 flexGrow: 1,
                 overflowY: 'auto', // Дозволяємо прокрутку контенту
                 py: 3,
-                px: { xs: 2, sm: 3, md: 4 }
+                paddingTop: 12,
+                px: { xs: 2, sm: 3, md: 12 }
             }}>
                 {/* Показуємо помилку завантаження секцій тут, якщо вони вже були */}
                 {error && sections.length > 0 && (

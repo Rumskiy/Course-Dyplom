@@ -5,11 +5,11 @@ export type AccountData = {
     // тут опиши всі поля, які приходять з /account,
     // наприклад:
     id: string;
-    email: string;
     firstName: string;
     lastName: string;
-    avatar?: string;
-    // …та інші
+    password: string;
+    email: string;
+    avatar_img?: string;
 }
 
 export const AccountSettings = async (): Promise<AccountData> => {
